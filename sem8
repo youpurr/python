@@ -1,0 +1,81 @@
+import os
+
+
+def display_menu():
+    print("1. Показать справочник")
+    print("2. Добавить контакт")
+    print("3. Изменить контакт")
+    print("4. Удалить контакт")
+    print("5. Выход")
+
+
+def read_phonebook(filename):
+    phonebook = {}
+    if os.path.exists(filename):
+        with open(filename, "r", encoding="utf-8") as file:
+            for line in file:
+                name, phone = line.strip().split(";")
+                phonebook[name] = phone
+    return phonebook
+
+
+def write_phonebook(filename, phonebook):
+    with open(filename, "w", encoding="utf-8") as file:
+        for name, phone in phonebook.items():
+            file.write(f"{name};{phone}\n")
+
+
+def show_phonebook(phonebook):
+    for name, phone in phonebook.items():
+        print(f"{name}: {phone}")
+
+
+def add_contact(phonebook):
+    name = input("Введите имя и фамилию: ")
+    phone = input("Введите номер телефона: ")
+    phonebook[name] = phone
+
+
+def edit_contact(phonebook):
+    name = input("Введите имя и фамилию: ")
+    if name in phonebook:
+        phone = input("Введите новый номер телефона: ")
+        phonebook[name] = phone
+    else:
+        print("Контакт не найден")
+
+
+def delete_contact(phonebook):
+    name = input("Введите имя и фамилию: ")
+    if name in phonebook:
+        del phonebook[name]
+    else:
+        print("Контакт не найден")
+
+
+def main():
+    filename = "phonebook.txt"
+    phonebook = read_phonebook(filename)
+
+    while True:
+        display_menu()
+        choice = int(input("Выберите действие: "))
+
+        if choice == 1:
+            show_phonebook(phonebook)
+        elif choice == 2:
+            add_contact(phonebook)
+        elif choice == 3:
+            edit_contact(phonebook)
+        elif choice == 4:
+            delete_contact(phonebook)
+        elif choice == 5:
+            break
+        else:
+            print("Неверный выбор")
+
+        write_phonebook(filename, phonebook)
+
+
+if __name__ == "__main__":
+    main()
